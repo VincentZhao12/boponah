@@ -1,6 +1,6 @@
-import librosa
-import numpy as np
 import os
+import numpy as np
+import librosa
 import time
 import logging
 from sklearn.neighbors import NearestNeighbors
@@ -28,38 +28,49 @@ def list_files_in_folder(folder_path):
             files.append(full_path)
     return files
 
+def save_features(features, file_path):
+    np.save(file_path, features)
+    logging.info(f'Features saved to {file_path}')
+
+def load_features(file_path):
+    features = np.load(file_path)
+    logging.info(f'Features loaded from {file_path}')
+    return features
+
 def main():
     folder_path = 'songs'
-    
-    # List of MP3 files
-    logging.info('Listing files in folder...')
+    features_file = 'audio_features.npy'
     list_of_audio_files = list_files_in_folder(folder_path)
-    logging.info(f'Found {len(list_of_audio_files)} files.')
     
-    # Extract features from all files with detailed logging and timing
-    logging.info('Extracting features from files...')
-    start_time = time.time()
-    
-    X = []
-    total_files = len(list_of_audio_files)
-    for i, file in enumerate(list_of_audio_files):
-        file_start_time = time.time()
-        logging.info(f'Processing file {i + 1}/{total_files}: {file}')
-        features = extract_audio_features(file)
-        X.append(features)
+    if os.path.exists(features_file):
+        logging.info('Loading features from file...')
+        X = load_features(features_file)
+    else:
+        logging.info('Extracting features from files...')
+        list_of_audio_files = list_files_in_folder(folder_path)
+        logging.info(f'Found {len(list_of_audio_files)} files.')
+
+        start_time = time.time()
+        X = []
+        total_files = len(list_of_audio_files)
+        for i, file in enumerate(list_of_audio_files):
+            file_start_time = time.time()
+            logging.info(f'Processing file {i + 1}/{total_files}: {file}')
+            features = extract_audio_features(file)
+            X.append(features)
+            file_time = time.time() - file_start_time
+            elapsed_time = time.time() - start_time
+            remaining_files = total_files - (i + 1)
+            estimated_total_time = (elapsed_time / (i + 1)) * total_files
+            estimated_remaining_time = estimated_total_time - elapsed_time
+            logging.info(f'Added features for file {file}. Time taken: {file_time:.2f} seconds.')
+            logging.info(f'Elapsed time: {elapsed_time:.2f} seconds. Estimated remaining time: {estimated_remaining_time:.2f} seconds.')
+
+        X = np.array(X)
+        feature_extraction_time = time.time() - start_time
+        logging.info(f'Feature extraction completed in {feature_extraction_time:.2f} seconds.')
         
-        file_time = time.time() - file_start_time
-        elapsed_time = time.time() - start_time
-        remaining_files = total_files - (i + 1)
-        estimated_total_time = (elapsed_time / (i + 1)) * total_files
-        estimated_remaining_time = estimated_total_time - elapsed_time
-        
-        logging.info(f'Added features for file {file}. Time taken: {file_time:.2f} seconds.')
-        logging.info(f'Elapsed time: {elapsed_time:.2f} seconds. Estimated remaining time: {estimated_remaining_time:.2f} seconds.')
-    
-    X = np.array(X)
-    feature_extraction_time = time.time() - start_time
-    logging.info(f'Feature extraction completed in {feature_extraction_time:.2f} seconds.')
+        save_features(X, features_file)
     
     # Train k-NN model
     logging.info('Training k-NN model...')
@@ -70,7 +81,7 @@ def main():
     logging.info(f'Training completed in {training_time:.2f} seconds.')
     
     # Example query
-    query_file = 'songs/Cheap Thrills - Sia.mp3'
+    query_file = 'songs/Higher Love - Kygo.mp3'
     logging.info(f'Extracting features from query file: {query_file}...')
     query_features = extract_audio_features(query_file)
     logging.info('Finding nearest neighbors...')
@@ -81,6 +92,7 @@ def main():
     
     # Output the indices of the nearest neighbors
     logging.info(f'Nearest neighbors indices: {indices[0]}')
+    logging.info('Nearest neighbors: ')
     for idx in indices[0]:
         logging.info(f'Nearest neighbor: {list_of_audio_files[idx]}')
 

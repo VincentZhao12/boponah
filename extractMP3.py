@@ -85,20 +85,22 @@ def main():
     pca = PCA(n_components=20)  # Adjust n_components as needed
     X_pca = pca.fit_transform(X_scaled)
 
+    playlist_files = [
+        'songs/Locked out of Heaven - Bruno Mars.mp3',
+        'songs/7 Years - Lukas Graham.mp3',
+        'songs/IDGAF - Dua Lipa.mp3'
+    ]
+
     # Train k-NN model
     logging.info('Training k-NN model...')
     start_time = time.time()
-    knn = NearestNeighbors(n_neighbors=5, algorithm='ball_tree')
+    knn = NearestNeighbors(n_neighbors=8, algorithm='ball_tree')
     knn.fit(X_pca)
     training_time = time.time() - start_time
     logging.info(f'Training completed in {training_time:.2f} seconds.')
     
     # Example playlist query
-    playlist_files = [
-        'songs/All of Me - John Legend.mp3',
-        'songs/7 Years - Lukas Graham.mp3',
-        'songs/IDGAF - Dua Lipa.mp3'
-    ]
+   
     
     logging.info(f'Extracting features from playlist files: {playlist_files}...')
     playlist_features = [extract_audio_features(file) for file in playlist_files]
@@ -110,12 +112,14 @@ def main():
     distances, indices = knn.kneighbors([user_profile])
     query_time = time.time() - start_time
     logging.info(f'Query completed in {query_time:.2f} seconds.')
-    
+
+    # Filter out query files from the nearest neighbors
+    nearest_neighbors = [list_of_audio_files[idx] for idx in indices[0] if list_of_audio_files[idx] not in playlist_files]
+
     # Output the indices of the nearest neighbors
-    logging.info(f'Nearest neighbors indices: {indices[0]}')
-    logging.info('Nearest neighbors: ')
-    for idx in indices[0]:
-        logging.info(f'Nearest neighbor: {list_of_audio_files[idx]}')
+    logging.info(f'Nearest neighbors: ')
+    for neighbor in nearest_neighbors:
+        logging.info(f'Nearest neighbor: {neighbor}')
 
 if __name__ == "__main__":
     main()

@@ -4,6 +4,8 @@ import librosa
 import time
 import logging
 from sklearn.neighbors import NearestNeighbors
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -36,6 +38,9 @@ def load_features(file_path):
     features = np.load(file_path)
     logging.info(f'Features loaded from {file_path}')
     return features
+
+def aggregate_features_pca(features_list, pca):
+    return pca.transform(features_list).mean(axis=0)
 
 def main():
     folder_path = 'songs'
@@ -72,21 +77,37 @@ def main():
         
         save_features(X, features_file)
     
+    # Standardize features before PCA
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    # Apply PCA
+    pca = PCA(n_components=20)  # Adjust n_components as needed
+    X_pca = pca.fit_transform(X_scaled)
+
     # Train k-NN model
     logging.info('Training k-NN model...')
     start_time = time.time()
     knn = NearestNeighbors(n_neighbors=5, algorithm='ball_tree')
-    knn.fit(X)
+    knn.fit(X_pca)
     training_time = time.time() - start_time
     logging.info(f'Training completed in {training_time:.2f} seconds.')
     
-    # Example query
-    query_file = 'songs/Higher Love - Kygo.mp3'
-    logging.info(f'Extracting features from query file: {query_file}...')
-    query_features = extract_audio_features(query_file)
+    # Example playlist query
+    playlist_files = [
+        'songs/All of Me - John Legend.mp3',
+        'songs/7 Years - Lukas Graham.mp3',
+        'songs/IDGAF - Dua Lipa.mp3'
+    ]
+    
+    logging.info(f'Extracting features from playlist files: {playlist_files}...')
+    playlist_features = [extract_audio_features(file) for file in playlist_files]
+    playlist_features_scaled = scaler.transform(playlist_features)
+    user_profile = aggregate_features_pca(playlist_features_scaled, pca)
+    
     logging.info('Finding nearest neighbors...')
     start_time = time.time()
-    distances, indices = knn.kneighbors([query_features])
+    distances, indices = knn.kneighbors([user_profile])
     query_time = time.time() - start_time
     logging.info(f'Query completed in {query_time:.2f} seconds.')
     

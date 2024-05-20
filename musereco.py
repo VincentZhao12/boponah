@@ -86,9 +86,9 @@ def main():
     X_pca = pca.fit_transform(X_scaled)
 
     playlist_files = [
-        'songs/Locked out of Heaven - Bruno Mars.mp3',
-        'songs/7 Years - Lukas Graham.mp3',
-        'songs/IDGAF - Dua Lipa.mp3'
+        'songs/Problem - Ariana Grande.mp3',
+        'songs/Love on Top - Beyoncé.mp3',
+        'songs/Heart Attack - Demi Lovato.mp3',
     ]
 
     # Train k-NN model

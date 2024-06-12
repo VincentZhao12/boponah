@@ -12,9 +12,12 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'key'
 
-client_id = 'test'
-client_secret = 'hehe'
-redirect_uri = 'http://127.0.0.1:5000/redirect'
+client_id = 'a376fc207dbb49158be47873998e16af'
+client_secret = 'e26cc9aeb4e04173beff691a527630e3'
+#redirect_uri = 'http://localhost:5000/redirect'
+#redirect_uri = 'http://127.0.0.1:5001/redirect'
+redirect_uri = 'https://7a63-67-188-104-131.ngrok-free.app/redirect'
+
 scope = 'playlist-read-private'
 
 cache_handler = FlaskSessionCacheHandler(session)
@@ -51,11 +54,17 @@ def get_playlists():
         auth_url = sp_oauth.get_authorize_url()
         return redirect(auth_url)
     
-    user_info = sp.current_user()
-    user_id = user_info['id']
+    try:
+        user_info = sp.current_user()
+        user_id = user_info['id']
+    except Exception as e:
+        pass
 
-    # Fetch and print the current user's playlists
-    playlists = sp.current_user_playlists(limit=5)['items']
+    try:
+        playlists = sp.current_user_playlists(limit=5)['items']
+    except Exception as e:
+        pass
+    
     all_playlists = {}
     for playlist in playlists:
         playlist_name = playlist['name']
@@ -63,12 +72,17 @@ def get_playlists():
         all_tracks = []
         offset = 0
         while True:
-            playlist_tracks = sp.playlist_tracks(playlist_id, offset=offset)
-            tracks_info = [item['track']['name'] for item in playlist_tracks['items']]
-            all_tracks.extend(tracks_info)
-            if len(playlist_tracks['items']) < 100:
-                break
-            offset += 100
+            try:
+                playlist_tracks = sp.playlist_tracks(playlist_id, offset=offset)
+                if playlist_tracks is None or 'items' not in playlist_tracks:
+                    break
+                tracks_info = [item['track']['name'] for item in playlist_tracks['items'] if item['track'] is not None]
+                all_tracks.extend(tracks_info)
+                if len(playlist_tracks['items']) < 100:
+                    break
+                offset += 100
+            except Exception as e:
+                pass
         
         all_playlists[playlist_name] = all_tracks
 
@@ -88,4 +102,4 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5001,debug=True)

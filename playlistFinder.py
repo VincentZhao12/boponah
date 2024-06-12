@@ -12,8 +12,8 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'key'
 
-client_id = 'a376fc207dbb49158be47873998e16af'
-client_secret = 'e26cc9aeb4e04173beff691a527630e3'
+client_id = 'test'
+client_secret = 'hehe'
 redirect_uri = 'http://127.0.0.1:5000/redirect'
 scope = 'playlist-read-private'
 

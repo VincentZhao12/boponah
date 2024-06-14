@@ -149,7 +149,20 @@ def give_recommendations(playlist_files, features_file='audio_features.npz'):
         features_dict, song_list = load_features_and_songs(features_file)
     else:
         logging.error('Features file does not exist.')
-        return []
+        features_dict, song_list = {}, []
+
+    # Process any new playlist files not in the features dictionary
+    new_files = [file for file in playlist_files if file not in features_dict]
+    if new_files:
+        logging.info('Processing new files...')
+        for file in new_files:
+            file = 'songs/'+file + '.mp3'
+            features = extract_audio_features(file)
+            file_name_without_ext = os.path.splitext(os.path.basename(file))[0]
+            features_dict[file_name_without_ext] = features
+
+        # Save updated features and songs
+        save_features_and_songs(features_dict, list(features_dict.keys()), features_file)
 
     # Convert dictionary to lists for further processing
     filenames = list(features_dict.keys())
@@ -163,10 +176,10 @@ def give_recommendations(playlist_files, features_file='audio_features.npz'):
     pca = PCA(n_components=20)  # Adjust n_components as needed
     X_pca = pca.fit_transform(X_scaled)
 
-    # Example playlist query
+    # Extract features for the playlist files from the features dictionary
     logging.info(f'Extracting features from playlist files: {playlist_files}...')
-    playlist_features = [features_dict[file] for file in playlist_files if file in features_dict]
-    
+    playlist_features = [features_dict[os.path.splitext(os.path.basename(file))[0]] for file in playlist_files if os.path.splitext(os.path.basename(file))[0] in features_dict]
+
     if not playlist_features:
         logging.error('None of the playlist files are found in the features dictionary.')
         return []
@@ -183,7 +196,7 @@ def give_recommendations(playlist_files, features_file='audio_features.npz'):
     distances, indices = knn.kneighbors([user_profile])
 
     # Filter out query files from the nearest neighbors
-    nearest_neighbors = [filenames[idx] for idx in indices[0] if filenames[idx] not in playlist_files]
+    nearest_neighbors = [filenames[idx] for idx in indices[0] if filenames[idx] not in [os.path.splitext(os.path.basename(file))[0] for file in playlist_files]]
 
     return nearest_neighbors
 def check_npz_file(file_path):

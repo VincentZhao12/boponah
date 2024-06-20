@@ -2,3 +2,4 @@ data
 .cache
 .mp3
 .DS_Store
+*.mp3

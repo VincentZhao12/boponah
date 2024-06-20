@@ -15,8 +15,8 @@ app.config['SECRET_KEY'] = 'key'
 client_id = 'a376fc207dbb49158be47873998e16af'
 client_secret = 'e26cc9aeb4e04173beff691a527630e3'
 #redirect_uri = 'http://localhost:5000/redirect'
-#redirect_uri = 'http://127.0.0.1:5001/redirect'
-redirect_uri = 'https://7a63-67-188-104-131.ngrok-free.app/redirect'
+redirect_uri = 'http://127.0.0.1:5001/redirect'
+#redirect_uri = 'https://7a63-67-188-104-131.ngrok-free.app/redirect'
 
 scope = 'playlist-read-private'
 
@@ -49,7 +49,8 @@ def redirect_page():
 
     
 @app.route('/get_playlists')
-def get_playlists():
+def get_playlists(sp_obj):
+    sp = sp_obj
     if not sp_oauth.validate_token(cache_handler.get_cached_token()):
         auth_url = sp_oauth.get_authorize_url()
         return redirect(auth_url)
@@ -84,16 +85,12 @@ def get_playlists():
             except Exception as e:
                 pass
         
-        all_playlists[playlist_name] = all_tracks
+        all_playlists[playlist_name] = {
+            "id": playlist_id,
+            "tracks": all_tracks
+        }
 
-    html_content = f"<h1>Playlists for user {user_id}</h1>"
-    for playlist_name, tracks in all_playlists.items():
-        html_content += f"<h2>{playlist_name}</h2><ul>"
-        for track in tracks:
-            html_content += f"<li>{track}</li>"
-        html_content += "</ul>"
-
-    return html_content
+    return all_playlists
     
 
 @app.route('/logout')

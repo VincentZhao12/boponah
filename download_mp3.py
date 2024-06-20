@@ -3,7 +3,6 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
 import requests
 import numpy as np
-from pydub import AudioSegment
 import os
 from tempfile import mktemp
 import pickle

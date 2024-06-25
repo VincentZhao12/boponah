@@ -22,7 +22,8 @@ app.config['SECRET_KEY'] = 'key'
 
 client_id = 'a376fc207dbb49158be47873998e16af'
 client_secret = 'e26cc9aeb4e04173beff691a527630e3'
-redirect_uri = 'http://127.0.0.1:5001/redirect'
+#redirect_uri = 'http://127.0.0.1:5001/redirect'
+redirect_uri = 'https://64ef-146-74-94-63.ngrok-free.app/redirect'
 
 scope = 'playlist-read-private playlist-modify-private playlist-modify-public'
 
@@ -100,6 +101,7 @@ def select_playlist():
 @app.route('/processing')
 def processing():
     return render_template('processing.html')
+
 
 @app.route('/results', methods=['POST'])
 def results():

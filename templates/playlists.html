@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Playlist</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='playlistStyles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='processingStyles.css') }}">
 </head>
 <body>
     <div class="container">
@@ -26,7 +27,18 @@
     </div>
     <script>
         function selectPlaylist(playlistId) {
-            document.body.innerHTML = '<div class="container"><h1 class="title">Processing</h1><div class="loading"><div class="circle"></div></div></div>';
+            document.body.innerHTML = `
+                <div class="container">
+                    <div id="loading-container">
+                        <div id="loading-text">Processing</div>
+                        <div id="loading-circle">
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>`;
             fetch('/select_playlist', {
                 method: 'POST',
                 headers: {

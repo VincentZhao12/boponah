@@ -1,22 +1,30 @@
 document.addEventListener("DOMContentLoaded", function() {
-    let loadingProgress = document.getElementById("loading-progress");
-    let resultContainer = document.getElementById("result-container");
-    let loadingContainer = document.getElementById("loading-container");
-  
     function simulateLoading() {
-      let width = 0;
-      let interval = setInterval(function() {
-        if (width >= 100) {
-          clearInterval(interval);
-          loadingContainer.style.display = "none";
-          resultContainer.style.display = "block";
-        } else {
-          width++;
-          loadingProgress.style.width = width + "%";
-        }
-      }, 50); // Adjust the speed of loading here
+        setTimeout(function() {
+            // Fetch track details and redirect to results
+            fetch('/get_recommendations')
+                .then(response => response.json())
+                .then(data => {
+                    // Redirect to results with track details and playlist name
+                    fetch('/results', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 5000); // Simulate a 5-second loading time
     }
-  
+
     simulateLoading();
-  });
-  
+});

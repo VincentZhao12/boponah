@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='processingStyles.css') }}">
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Recommendations for {{ playlist_name }}</h1>
+        <ul class="recommendations">
+            {% for track in track_details %}
+                <li class="track-item">
+                    <div class="track-info">
+                        <img src="{{ track.image_url }}" alt="Song Image" class="track-image">
+                        <div class="track-details">
+                            <span class="track-name">{{ track.name }}</span>
+                            <span class="track-artist">{{ track.artist }}</span>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="play-button" onclick="playPreview('{{ track.preview_url }}')">Play</button>
+                        <button class="add-button" onclick="addToPlaylist('{{ track.id }}')">Add to Playlist</button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <button class="generate-more-button">Generate More</button>
+        <a href="/" class="back-to-home-button">Back to Home</a>
+    </div>
+    <audio id="preview-player"></audio>
+    <script>
+        function playPreview(previewUrl) {
+            const player = document.getElementById('preview-player');
+            player.src = previewUrl;
+            player.play();
+        }
+
+        function addToPlaylist(trackId) {
+            fetch('/add_to_playlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ track_id: trackId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

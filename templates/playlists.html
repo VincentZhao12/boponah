@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Playlist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='playlistStyles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">Back</a>
+        <h1 class="title">Select Playlist</h1>
+        <div class="playlists">
+            {% for playlist in playlists %}
+                <button class="playlist-button" onclick="selectPlaylist('{{ playlist.id }}')">
+                    {% if playlist.images %}
+                        <img src="{{ playlist.images[0].url }}" alt="Playlist Icon" class="playlist-icon">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='default_playlist_icon.png') }}" alt="Default Playlist Icon" class="playlist-icon">
+                    {% endif %}
+                    <span class="playlist-name">{{ playlist.name }}</span>
+                </button>
+            {% endfor %}
+        </div>
+        <button class="choose-another-button">Choose Another</button>
+    </div>
+    <script>
+        function selectPlaylist(playlistId) {
+            document.body.innerHTML = '<div class="container"><h1 class="title">Processing</h1><div class="loading"><div class="circle"></div></div></div>';
+            fetch('/select_playlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ playlist_id: playlistId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    fetch('/results', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

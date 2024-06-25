@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boponah</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='homeStyles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Boponah Logo">
+        </div>
+        <h1 class="title">Boponah</h1>
+        <a href="{{ url_for('login') }}" class="login-button">
+            <img src="{{ url_for('static', filename='spotify.png') }}" alt="Spotify Logo">
+            Login with Spotify
+        </a>
+    </div>
+</body>
+</html>

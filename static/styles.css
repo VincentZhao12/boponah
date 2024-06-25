@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+  }
+  
+  #loading-container {
+    text-align: center;
+  }
+  
+  #loading-text {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  #loading-bar {
+    width: 300px;
+    height: 30px;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  #loading-progress {
+    height: 100%;
+    width: 0;
+    background-color: #3498db;
+    border-radius: 15px 0 0 15px;
+    position: absolute;
+  }
+  

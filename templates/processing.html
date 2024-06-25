@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading Example</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div id="loading-container">
+    <div id="loading-text">Processing</div>
+    <div id="loading-bar">
+      <div id="loading-progress"></div>
+    </div>
+  </div>
+  <div id="result-container" style="display: none;">
+    <h1>Results</h1>
+    <p>Your results will be displayed here.</p>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

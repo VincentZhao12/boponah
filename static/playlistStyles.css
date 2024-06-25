@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(173,216,230,0.3), rgba(255,255,255,1));
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+.back-button {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: blue;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+    margin: 20px 0;
+}
+
+.playlists {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.playlist-button {
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    color: black;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.playlist-button:hover {
+    background-color: #e9e9e9;
+    border-color: #bbb;
+}
+
+.playlist-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.playlist-name {
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+.choose-another-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    font-weight: medium;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.choose-another-button:hover {
+    background-color: #0056b3;
+}

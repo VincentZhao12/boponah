@@ -66,7 +66,7 @@ def fetch_billboard_data(start_date, end_date, interval='weekly'):
     return pd.DataFrame(all_chart_data)
 
 # Fetch Billboard Hot 100 data from 2000 to 2024 as an example
-df = fetch_billboard_data('2000-01-01', '2024-05-20')
+df = fetch_billboard_data('2024-05-20', '2024-06-25')
 df.to_csv('billboard_hot_100_2000_2024.csv', index=False)
 
 print("Billboard Hot 100 data saved to billboard_hot_100_2000_2024.csv")

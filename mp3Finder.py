@@ -125,3 +125,27 @@ if __name__ == "__main__":
     '''
 
 
+
+def process_song_list_from_csv(csv_file_path):
+    # Read the CSV file
+    try:
+        song_list = pd.read_csv(csv_file_path)
+    except Exception as e:
+        print(f"Error reading CSV file: {e}")
+        return None
+
+    generated_files = []
+    for index, song in song_list.iterrows():
+        song_key = process_one_song(song['song_name'], song['artist_name'])
+        generated_files.append(song['song_name'] + " - " + song['artist_name'])
+    
+    return generated_files
+
+if __name__ == "__main__":
+
+    # Specify the CSV file path
+    csv_file_path = 'csviles/billboard_hot_100_2000_2024.csv'  # Replace with your CSV file path
+
+    # Run the function and print the generated files
+    generated_files = process_song_list_from_csv(csv_file_path)
+    print("Generated files:", generated_files)

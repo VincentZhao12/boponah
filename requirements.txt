@@ -15,7 +15,7 @@ MarkupSafe==2.1.5
 openai==1.35.6
 pydantic==2.7.4
 pydantic_core==2.18.4
-PySide6_Essentials==6.7.2
+PySide6-Essentials==6.7.2
 pytube==15.0.0
 PyYAML==6.0.1
 shiboken6==6.7.2
@@ -23,17 +23,10 @@ sniffio==1.3.1
 tqdm==4.66.4
 typing_extensions==4.12.2
 Werkzeug==3.0.3
-wheel @ file:///opt/homebrew/Cellar/python%403.12/3.12.4/libexec/wheel-0.43.0-py3-none-any.whl#sha256=ff23205a590f2b902a2a21151019e96b93ab4a1409d7c9748b6bd210f4c0f44d
-pandas
-time
-pandas
-time
-yt_dlp
-os
-numpy
-youtube-search-python
-spotipy
-librosa
-logging
-sklearn 
-
+pandas==1.3.3
+yt-dlp==2022.3.6
+numpy==1.21.5
+youtube-search-python==1.4.3
+spotipy==2.19.0
+librosa==1.1.1
+scikit-learn==0.24.2

@@ -1,6 +1,3 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import time
 import yt_dlp as youtube_dl
@@ -37,6 +34,7 @@ def download_mp3(video_url, output_path):
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
+        
         }],
         'postprocessor_args': [
             '-ss', '10', '-t', '40'  # Start at 10 seconds, extract 30 seconds

@@ -8,9 +8,6 @@ from spotipy.cache_handler import FlaskSessionCacheHandler
 import os
 import logging
 import time
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 import yt_dlp as youtube_dl
 from playlistFinder import get_playlists
 from mp3Finder import process_one_song, process_song_list
@@ -26,8 +23,8 @@ app.config['SECRET_KEY'] = 'key'
 
 client_id = 'a376fc207dbb49158be47873998e16af'
 client_secret = 'e26cc9aeb4e04173beff691a527630e3'
-redirect_uri = 'http://127.0.0.1:5001/redirect'
-#redirect_uri = 'https://64ef-146-74-94-63.ngrok-free.app/redirect'
+#redirect_uri = 'http://127.0.0.1:5001/redirect'
+redirect_uri = 'https://5349-67-188-104-131.ngrok-free.app/redirect'
 
 scope = 'playlist-read-private playlist-modify-private playlist-modify-public'
 
